@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="col-12 bg-light my-5">
+        <div class="col-12 d-flex">
+            <div class="col-5 p-3">
+                <p>{{ article.category.name }}</p>
+                <h3>{{ article.title }}</h3>
+                <p>{{ article.created_by.get_full_name }}</p>
+                <p class="text-secondary">{{ article.created_at }}</p>
+                <a href="{% url 'news-like' article.pk %}">
+                    <i class="fa fa-thumbs-up"></i>
+                    {{ article.number_of_likes }}
+                </a>
+            </div>
+            <div class="col-7 p-3">
+                {% if article.image_url %}
+                    <img width="100%" src="{{ article.image_url }}">
+                {% elif article.image %}
+                    <img width="100%" src="{{ article.image.url }}">
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-12 p-3">
+            <p class="text-secondary">
+                {{ article.description|safe }}
+            </p>
+        </div>
+    </div>
+    <div class="col-12 bg-light my-5">
+        <div class="col-12 p-3 d-flex">
+            <form method="POST" action="{% url 'article-comment' article.pk %}">
+                {% csrf_token %}
+                {{ comment_form.as_div }}
+                <button class="btn btn-primary" type="submit">Post</button>
+            </form>
+        </div>
+    </div>
+    {% for comment in article.comment_set.all|dictsortreversed:"posted_at" %}
+        <div class="col-12 bg-light my-5">
+            <div class="col-12 d-flex">
+                <div class="col-5 p-3">
+                    {{ comment.posted_by.get_full_name }}
+                    <br>
+                    {{ comment.posted_at }}
+                </div>
+                <div class="col-7 p-3">
+                    {{ comment.comment }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+

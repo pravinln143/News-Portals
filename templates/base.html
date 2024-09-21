@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}News{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: #2f2d2d;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(20, 19, 19, 0.1);
+            background-color: #f5efef;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #00246B;
+        }
+
+        .card-text {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #040404;
+        }
+
+        .text-secondary {
+            color: #6c757d;
+        }
+
+        .rounded {
+            border-radius: 10px;
+        }
+
+        .shadow-sm {
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        a {
+            color: #111010;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #0c0b0b;
+        }
+
+        .fa-thumbs-up {
+            color: #0050fd;
+        }
+
+        .fa-thumbs-up:hover {
+            color: #0050fd;
+        }
+
+        .navbar {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-family: Arial, sans-serif;
+        }
+
+        .nav-link {
+            font-family: Arial, sans-serif;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #0050fd !important;
+        }
+
+        .fa-power-off {
+            transition: color 0.2s ease;
+        }
+
+        .fa-power-off:hover {
+            color: #333 !important;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 20px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 15px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-section ul li a:hover {
+            text-decoration: underline;
+        }
+
+        #map {
+            width: 100%;
+            height: 200px;
+            margin-top: 20px;
+        }
+
+        .social-icons {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 20px;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 10px;
+            border-top: 1px solid #444;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .map-container {
+            position: absolute;
+            top: 50%;
+            right: 20px; /* Adjust this value to position the map as desired */
+            transform: translateY(-50%);
+            height: 300px;
+            width: 300px; /* Adjust width as needed */
+        }
+
+        @media (max-width: 768px) {
+            .map-container {
+                position: relative;
+                top: auto;
+                right: auto;
+                transform: translateY(0);
+                width: 100%;
+            }
+        }
+    </style>
+    {% block extra_styles %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding: 20px; font-size: 18px;">
+        <a class="navbar-brand" href="{% url 'homepage' %}" style="font-size: 24px; font-weight: bold;">NewsPortal</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'homepage' %}" style="color: #0050fd;">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #333;">
+                        Categories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="https://www.thehindu.com/news/international/iran-rejects-western-calls-to-stand-down-israel-threat/article68520334.ece">World News</a>
+                        <a class="dropdown-item" href="https://indianexpress.com/section/technology/">Technology</a>
+                        <a class="dropdown-item" href="https://indianexpress.com/section/entertainment/">Entertainment</a>
+                        <a class="dropdown-item" href="https://www.nbcnews.com/health">Health</a>
+                        <a class="dropdown-item" href="https://www.moneycontrol.com/stocksmarketsindia/">Indian Share Markets</a>
+                        <a class="dropdown-item" href="https://www.cnbc.com/world/">Global Markets</a>
+                        <a class="dropdown-item" href="https://timesofindia.indiatimes.com/sports">Sports</a>
+                        <a class="dropdown-item" href="https://www.thehindubusinessline.com/economy/agri-business/">Agriculture</a>
+                        <a class="dropdown-item" href="https://www.indiatoday.in/defence">Defence</a>
+                        <a class="dropdown-item" href="https://telecom.economictimes.indiatimes.com/tag/communication">Communications and IT</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'publish_news' %}" style="color: #333;">Publish News</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #333;">
+                        Services
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="servicesDropdown">
+                        <a class="dropdown-item" href="{% url 'publish_news' %}">Publish News</a>
+                        {% if user.is_authenticated %}
+                            <a class="dropdown-item" href="{% url 'razorpay_payment' %}">Publish Ads</a>
+                        {% endif %}
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <form method="post" action="{% url 'logout' %}" class="d-flex align-items-center">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link p-0" style="background: none; border: none; color: #0050fd; font-size: 18px;">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}" style="color: #0050fd;">Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Get started</h4>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Sign up</a></li>
+                    <li><a href="#">Downloads</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>About us</h4>
+                <ul>
+                    <li><a href="#">Company Information</a></li>
+                    <li><a href="#">Contact us</a></li>
+                    <li><a href="#">Reviews</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Help desk</a></li>
+                    <li><a href="#">Forums</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Embedded Google Map -->
+        <div id="map">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3021.8801872567885!2d-74.0104!3d40.7128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a317d8f6bff%3A0x42195c0bfb0d1f8!2sOne%20World%20Trade%20Center!5e0!3m2!1sen!2sus!4v1621420738669!5m2!1sen!2sus" 
+                width="100%" 
+                height="200" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy"></iframe>
+        </div>
+
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-google"></i></a>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2024 Your Company Name
+        </div>
+    </footer>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
